@@ -72,7 +72,7 @@ nano geo-activity-playground.json
 
 ## Compose configuration with Tailscale network
 
-With these steps the playground folder (which contains the activities) will be located in the docker project folder. The location can also be changed in the `compose.yml`
+With these steps the playground folder (which contains the activities) will be located in the docker project folder. The location can be changed in the `compose.yml`.
 
 ```bash
 mkdir -p /docker/geo-activity-playground/playground/Activities
@@ -102,7 +102,7 @@ services:
   geo-activity:
     build:
       context: https://github.com/martin-ueding/geo-activity-playground.git
-      # this sets the build context to the DOCKERFILE located in the github repository
+      # this sets the build context to the DOCKERFILE located in the Github repository
     container_name: geo-activity-playground
     depends_on:
       - ts-geo-activity-playground # start container after the VPN network is active
