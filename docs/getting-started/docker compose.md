@@ -3,11 +3,11 @@
 [Docker](https://www.docker.com/) is a software that allows you to run Linux programs in a container.
 [Docker Compose](https://docs.docker.com/compose/) is a tool for defining multi-container Docker environments in a single YAML configuration file and deploy it with a single command.
 
-This how-to will give you an example compose.yml that can build the docker image from git and start this project within a Docker container.
+This how-to will give you an example `compose.yml` that can build the geo-activity-playground docker image from Github and start this project within a Docker container.
 
 ## Creating directory structure and compose.yml
 
-With these steps the playground folder (which contains the activities) will be located in the docker project folder. The location can also be changed in the compose.yml
+With these steps the playground folder (which contains the activities) will be located in the docker project folder. The location can be changed in the `compose.yml`.
 
 ```bash
 mkdir -p /docker/geo-activity-playground/playground/Activities
@@ -20,7 +20,7 @@ services:
   geo-activity:
     build:
       context: https://github.com/martin-ueding/geo-activity-playground.git
-      # this sets the build context to the DOCKERFILE located in the github repository
+      # this sets the build context to the DOCKERFILE located in the Github repository
     container_name: geo-activity-playground
     volumes:
       - /docker/geo-activity-playground/playground:/data  # optional: change left side to your desired playground directory
