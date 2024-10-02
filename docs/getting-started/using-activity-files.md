@@ -1,12 +1,29 @@
-# Using Activity Files
+Outdoor activities are usually recorded as `.GPX` or `.FIT`. Some apps like [OsmAnd](https://osmand.net/) give you these files.
 
-Outdoor activities are usually recorded as GPX or FIT files. Some apps like OsmAnd give you these files.
+# Supported file formats
 
-Create a directory somewhere, this will be your _playground_. I have mine in `~/Dokumente/Karten/Playground`, but you can put yours wherever you would like.
+- FIT
+- GPX
+- TCX
+- KML
 
-Inside `Playground`, create another directory `Activities` where your activity files will go. You will need to put at least one activity file in there, otherwise the program cannot start. The program will not modify files in that directory and treat them as read-only.
+# Add Activity Files
 
-## Directory structure
+Before starting the service you need to create a folder for your activities and put at least one activity file in there.
+
+Create a `Playground` folder  on your storage somewhere and add a subfolder `Activities`. There you can add your activity files.  
+For example:
+```
+../
+├─ Documents[or other location]/
+│  ├─ Playground/
+│  │  ├─ Activities/
+│  │  │  ├─ 2024-06-22-12-24-42 Bike Ride to the Beach.gpx
+```
+The program will treat the files as read-only and does not modify them.  
+After starting the service you can [upload activities](https://martin-ueding.github.io/geo-activity-playground/features/upload/) without needing to restart.
+
+## Metadata extraction
 
 Some activity file formats contain metadata. You can also add metadata via the file name and by putting into a directory. By default only the stem of the path (the part without the suffix) will be used to derive the name of the activity. If you want, you can use a naming and directory structure to fill in more meta data using regular expressions.
 
@@ -27,13 +44,7 @@ In order to extract this data, I specify a list of regular expressions with name
 
 Put something like that at the top of your `config.toml` in order to extract metadata from the files and have it override metadata from the within the files.
 
-## Supported file formats
 
-At the moment the following file formats are supported:
-
-1. FIT
-2. GPX
-3. TCX
 
 ## Next steps
 
