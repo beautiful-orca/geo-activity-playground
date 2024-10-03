@@ -1,6 +1,6 @@
 # Using Activity Files
 
-Outdoor activities are usually recorded as `.GPX` or `.FIT` file. Some apps like [OsmAnd](https://osmand.net/) give you these files.
+Outdoor activities are usually recorded as `.GPX` or `.FIT` files. Some apps like [OsmAnd](https://osmand.net/) give you these files.
 
 ## Supported file formats
 
@@ -45,19 +45,18 @@ You can also add metadata via the file name and by putting files into respective
 
 If you want, you can use a naming and directory structure to fill in more meta data using regular expressions.
 
-Using a regular expression with named capture groups one can extract these fields also from the files. I for instance have the following file paths:
+Using a regular expression with named capture groups one can extract these fields also from the files.
+
+I for instance have the following file paths:
 
 ```
-~/
-├─ Documents[or other location]/
-│  ├─ Playground/
-│  │  ├─ Activities/
-│  │  │  ├─ Ride/
-│  │  │  │  ├─ Trekking Bike/
-│  │  │  │  │  ├─ 2024-03-03-17-42-10.fit
-│  │  │  ├─ Hike/
-│  │  │  │  ├─ Hiking Boots 2019/
-│  │  │  │  │  ├─ 2024-03-03-11-03-18 Some nice place with Alice and Bob.fit
+Activities/
+├─ Ride/
+│  ├─ Trekking Bike/
+│  │  ├─ 2024-03-03-17-42-10.fit
+├─ Hike/
+│  ├─ Hiking Boots 2019/
+│  │  ├─ 2024-03-03-11-03-18 Some nice place with Alice and Bob.fit
 ```
 
 My structure is built such that the first directory level corresponds to the activity kind. The second level is the equipment used. Unique activities are directly in there as files. But there can also be a directory for the name and then just files with only the date as name. This way I can just put a lot of similar commutes there without having to name the files. In the first example I want it to take the name from the third directory. In either case I don't want to have the date to be part of the name.
@@ -70,9 +69,34 @@ In order to extract this data, I specify a list of regular expressions with name
 (?P<kind>[^/]+)/[-\d_ ]+(?P<name>[^/]+)(?:\.\w+)+$
 ```
 
-Put something like that at the top of your `config.toml` in order to extract metadata from the files and have it override metadata from the within the files.
+Put something like that at the top of your `config.json` in your Playground folder.
+ in order to extract metadata from the files and have it override metadata from the within the files.
 
+## OsmAnd name format
 
+### Extract name including weekday after date and time, as created by OSMAnd with added comment
+```
+re.search(r'(?P<kind>[^/]+)/(?P<equipment>[^/]+)/\d{4}-\d{2}-\d{2}_\d{2}-\d{2}_(?P<name>[^/.]*)', '/Ride/Trekkingrad/2024-09-25_10-28_Wed Zum Zahnarzt.gpx').groupdict()
+{'kind': 'Ride', 'equipment': 'Trekkingrad', 'name': 'Wed Zum Zahnarzt'}
+```
+
+### Extract name after date, time and weekday, as created by OSMAnd with added comment
+```
+re.search(r'(?P<kind>[^/]+)/(?P<equipment>[^/]+)/\S+ ?(?P<name>[^/\.]*)', '/Ride/Trekkingrad/2024-09-25_10-28_Wed Zum Zahnarzt.gpx').groupdict()
+{'kind': 'Ride', 'equipment': 'Trekkingrad', 'name': 'Zum Zahnarzt'}
+```
+
+### Extract name from file name
+```
+'(?P<kind>[^/]+)/(?P<equipment>[^/]+)/(?P<name>[^/.]+)'
+
+'/Ride/Trekkingrad/2024-09-25_10-28_Wed Zum Zahnarzt.gpx'
+{'kind': 'Ride',
+ 'equipment': 'Trekkingrad',
+ 'name': '2024-09-25_10-28_Wed Zum Zahnarzt'}
+
+(?P<kind>[^/]+)/(?P<equipment>[^/]+)/(?P<name>[^/.]+)
+```
 
 ## Next steps
 
