@@ -26,16 +26,16 @@ For example:
 ```
 The program will treat the files as read-only and does not modify them.  
 
-You can extend the directory structure to sort them by different categories, see [Advanced Metadata Extraction](https://martin-ueding.github.io/geo-activity-playground/getting-started/using-activity-files/#advanced-metadata-extraction).
+You can extend the directory structure to differntiate them by categories, see [Advanced Metadata Extraction](https://martin-ueding.github.io/geo-activity-playground/getting-started/using-activity-files/#advanced-metadata-extraction).
 Once the service is running you can use the [Uploader](https://martin-ueding.github.io/geo-activity-playground/features/upload/) to avoid needing to restart.
 
 # Metadata extraction
 
 Most activity file formats contain basic data like date, time and track points.  
-Each activity in geo-activity-playground has the metadata fields `kind`, `equipment` and `name`. These can be extracted for files that contain those.  
+Each activity in geo-activity-playground also has the metadata fields `kind`, `equipment` and `name`. They can be extracted from files that contain them.  
 
 If no metadata is found, `kind` and `equipment` default to “Unknown”. The `name` is then extracted from the file name (without the suffix).  
-So for `2024-03-03-17-42-10 Home to Bakery.gpx` the name is `2024-03-03-17-42-10 Home to Bakery`.
+So for `Activities/2024-03-03-17-42-10 Home to Bakery.gpx` the name is `2024-03-03-17-42-10 Home to Bakery`.
 
 ## Advanced Metadata extraction
 
