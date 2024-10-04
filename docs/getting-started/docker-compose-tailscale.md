@@ -112,6 +112,9 @@ services:
     restart: unless-stopped
 ```
 
+If you want to build the release version of geo-activity-playground from Github instead, you can adjust the build context and add the release tag.  
+`context: https://github.com/martin-ueding/geo-activity-playground.git#0.29.1`
+
 ## Building image and running container
 
 You need to set up your files according to one of the presented methods, like activity files or the Strava API. Consult the other pages in the sidebar for the details.
@@ -125,3 +128,13 @@ docker compose up -d
 
 This will start the webserver and expose it via your tailnet on <https://[HOSTNAME].[YourTailnetName].ts.net/>, eg. <https://geo-activity-playground.tail41a3.ts.net/>.
 In order to access your instance via that domain, you have to install and authenticate the Tailscale client app on your device you want to open it from. 
+
+## Updating the image
+
+If using the tagged release version of geo-activity-playground, update the tag to the latest one first.
+
+```
+docker compose down
+docker compose build
+docker compose up -d --force-recreate
+```
