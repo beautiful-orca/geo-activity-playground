@@ -29,6 +29,9 @@ services:
     restart: unless-stopped
 ```
 
+If you want to build the release version from Github instead, you can adjust the build context and add the release tag.  
+`context: https://github.com/martin-ueding/geo-activity-playground.git#0.29.1`
+
 ## Building image and running container
 
 You need to set up your files according to one of the presented methods, like activity files or the Strava API. Consult the other pages in the sidebar for the details.
@@ -43,3 +46,13 @@ docker compose up -d
 This will start the webserver on <http://localhost:5000/> or at the port you chose to expose.
 
 Note that port 5000 may not be available on macOS because of AirPlay, so you can map to another port.
+
+## Updating the image
+
+If using the tagged release version, update the tag to the latest one first.
+
+```
+docker compose down
+docker compose build
+docker compose up -d --force-recreate
+```
