@@ -1,6 +1,6 @@
 # Using Activity Files
 
-Outdoor activities are usually recorded as `.GPX` or `.FIT` files. Some apps like [OsmAnd](https://osmand.net/) give you these files.
+Outdoor activities are usually recorded as `.GPX` or `.FIT` files. Some apps like [OsmAnd](https://osmand.net/) , [OpenTracks](https://opentracksapp.com/) or [Organic Maps](https://organicmaps.app/) give you these files.
 
 ## Supported file formats
 
@@ -26,47 +26,55 @@ For example:
 ```
 The program will treat the files as read-only and does not modify them.  
 
-You can extend the directory structure to differntiate them by categories, see [Advanced Metadata Extraction](https://martin-ueding.github.io/geo-activity-playground/getting-started/using-activity-files/#advanced-metadata-extraction).
-Once the service is running you can use the [Uploader](https://martin-ueding.github.io/geo-activity-playground/features/upload/) to avoid needing to restart.
+Once the service is running you can use the [Uploader](https://martin-ueding.github.io/geo-activity-playground/features/upload/) to add your files.
+You can manually rename, move or delete your activity files, but the program needs to reload to respect these changes.
+You can restart the program or visit `Scan New Activities` in the admin menu in the WebUI or navigate to `http://localhost:5000/upload/refresh`
+
+You can extend the directory structure to categorize your activities, see [Advanced Metadata Extraction](https://martin-ueding.github.io/geo-activity-playground/getting-started/using-activity-files/#advanced-metadata-extraction).
+
 
 # Metadata extraction
 
 Most activity file formats contain basic data like date, time and track points.  
 Each activity in geo-activity-playground also has the metadata fields `kind`, `equipment` and `name`. They can be extracted from files that contain them.  
 
-If no metadata is found, `kind` and `equipment` default to “Unknown”. The `name` is then extracted from the file name (without the suffix).  
+If no metadata is found, `kind` and `equipment` default to `Unknown`. The `name` is then extracted from the file name (without the suffix).  
 So for `Activities/2024-03-03-17-42-10 Home to Bakery.gpx` the name is `2024-03-03-17-42-10 Home to Bakery`.
 
 ## Advanced Metadata extraction
 
 If you would like to set the metadata fields or change what part of the filename should be the activity name, you can use a custom directory structure with corresponding Regex that extracts the text.
-The program uses Regex to search  
-and extracts the parts with named capture groups.
-
-
-What is the default regex??????
-how is the name extracted
-~/
-├─ Documents[or other location]/
-│  ├─ Playground/
-│  │  ├─ Activities/
-│  │  │  ├─ 2024-03-03-17-42-10 Home to Bakery.gpx
-
-
 
 An example directory structure
 ```
-Activities/
-├─ Ride/
-│  ├─ Trekking Bike/
-│  │  ├─ 2024-03-03-17-42-10.fit
-├─ Hike/
-│  ├─ Hiking Boots 2019/
-│  │  ├─ 2024-03-03-11-03-18 Some nice place with Alice and Bob.fit
+Playground/
+├─ Activities/
+│  ├─ Ride/
+│  │  ├─ Trekking Bike/
+│  │  │  ├─ 2024-03-03-17-42-10.fit
+│  ├─ Hike/
+│  │  ├─ Hiking Boots 2019/
+│  │  │  ├─ 2024-03-03-11-03-18 Some nice place with Alice and Bob.fit
+│  ├─ Test Track.gpx
 ```
 
 
 
+
+The program uses Regex to search for patterns in the file path and extracts the relevant parts with named capture groups.
+
+What is the default regex??????
+how is the name extracted?
+
+So the default extraction for the example directory structure is as follows:
+
+Ride/Trekking Bike/2024-03-03-17-42-10.fit : `kind` = `Ride` , `equipment` = `Trekking Bike` , `name` = `2024-03-03-17-42-10`
+
+
+Test Track.gpx : `kind` = `Unknown` , `equipment` = `Unknown` , `name` = `Test Track`
+
+
+## Custom Regex
 
 My structure is built such that the first directory level corresponds to the activity kind.
 The second level is the equipment used.
@@ -83,21 +91,21 @@ Put something like these regular expressions into the settings menu.
 (?P<kind>[^/]+)/[-\d_ ]+(?P<name>[^/]+)(?:\.\w+)+$
 ```
 
-## OsmAnd name format
+### OsmAnd name format
 
-### Extract name including weekday after date and time, as created by OSMAnd with added comment
+#### Extract name including weekday after date and time, as created by OSMAnd with added comment
 ```
 re.search(r'(?P<kind>[^/]+)/(?P<equipment>[^/]+)/\d{4}-\d{2}-\d{2}_\d{2}-\d{2}_(?P<name>[^/.]*)', '/Ride/Trekkingrad/2024-09-25_10-28_Wed Zum Zahnarzt.gpx').groupdict()
 {'kind': 'Ride', 'equipment': 'Trekkingrad', 'name': 'Wed Zum Zahnarzt'}
 ```
 
-### Extract name after date, time and weekday, as created by OSMAnd with added comment
+#### Extract name after date, time and weekday, as created by OSMAnd with added comment
 ```
 re.search(r'(?P<kind>[^/]+)/(?P<equipment>[^/]+)/\S+ ?(?P<name>[^/\.]*)', '/Ride/Trekkingrad/2024-09-25_10-28_Wed Zum Zahnarzt.gpx').groupdict()
 {'kind': 'Ride', 'equipment': 'Trekkingrad', 'name': 'Zum Zahnarzt'}
 ```
 
-### Extract name from file name
+#### Extract name from file name
 ```
 '(?P<kind>[^/]+)/(?P<equipment>[^/]+)/(?P<name>[^/.]+)'
 
